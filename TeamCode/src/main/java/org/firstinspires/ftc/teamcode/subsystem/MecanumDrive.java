@@ -51,7 +51,26 @@ public class MecanumDrive {
         this.setNormal(0,0);
     }
 
-    public void setControl(Gamepad gamepad, boolean fieldCentric) {
+    public void setControl(Gamepad gamepad) {
+        double y = -gamepad.left_stick_y;
+        double x = gamepad.left_stick_x * 1.1;
+        double rx = gamepad.right_stick_x;
+
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+
+        double frontLeftPower = (y + x + rx) / denominator;
+        double backLeftPower = (y - x + rx) / denominator;
+        double frontRightPower = (y - x -rx) / denominator;
+        double backRightPower = (y + x - rx) / denominator;
+
+        leftFront.setPower(frontLeftPower);
+        leftBack.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        rightBack.setPower(backRightPower);
+    }
+
+    /*public void setControl(Gamepad gamepad, boolean fieldCentric) {
 
         double y = -gamepad.left_stick_y;
         double x = gamepad.left_stick_x * 1.1;
@@ -108,9 +127,9 @@ public class MecanumDrive {
         }
         else if (gamepad.right_bumper) {
             strafeRight(1);
-        }*/
+        }
 
     }
-
+*/
 
 }

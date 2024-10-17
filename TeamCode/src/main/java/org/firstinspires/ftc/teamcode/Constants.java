@@ -28,8 +28,8 @@ public class Constants {
         public static final String lowerArm = "lowerArm";
         //first element is encoder position for upperArm; second element is for lowerArm
         public static final int[] START = {0, 0};
-        public static final int[] INTAKE = {3000, 4700};
+        public static final int[] INTAKE = {3000, 5200};
         public static final int[] LOWER_BASKET = {4500, 1000};
-        public static final int[] UPPER_BASKET = {7200, -300};
+        public static final int[] UPPER_BASKET = {7200, 300};
     }
 }

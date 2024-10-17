@@ -80,4 +80,8 @@ public class PIDF_Arm {
             lowerTarget = Constants.Arm.UPPER_BASKET[1];
         }
     }
+
+    /*public void setManualControl(Gamepad gamepad) {
+        if (gamepad.)
+    }*/
 }

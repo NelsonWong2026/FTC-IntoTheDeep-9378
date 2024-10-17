@@ -28,7 +28,7 @@ public class ManualTeleop extends OpMode {
     }
 
     public void loop() {
-        drive.setControl(gamepad1, false);
+        drive.setControl(gamepad1);
         arm.setControl(gamepad2);
         intake.setControl(gamepad2);
 

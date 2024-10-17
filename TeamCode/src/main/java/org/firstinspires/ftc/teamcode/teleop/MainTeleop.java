@@ -14,12 +14,12 @@ import org.firstinspires.ftc.teamcode.subsystem.PIDF_Arm;
 public class MainTeleop extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private MecanumDrive drive = new MecanumDrive();
-    private PIDF_Arm arm = new PIDF_Arm();
+    private PIDF_Arm pidArm = new PIDF_Arm();
     private Intake intake = new Intake();
 
     public void init() {
         drive.init(hardwareMap);
-        arm.init(hardwareMap);
+        pidArm.init(hardwareMap);
         intake.init(hardwareMap);
     }
 
@@ -28,8 +28,8 @@ public class MainTeleop extends OpMode {
     }
 
     public void loop() {
-        drive.setControl(gamepad1, false);
-        arm.setControl(gamepad2);
+        drive.setControl(gamepad1);
+        pidArm.setControl(gamepad2);
         intake.setControl(gamepad2);
 
         telemetry.addData("Status","Enabled");
