@@ -17,8 +17,8 @@ public class PIDF_Arm {
     public static double lowerP = 0.003, lowerI = 0, lowerD = 0, upperP = 0.002, upperI = 0.1, upperD = 0;
     public static double lowerF = 0, upperF = 0;
 
-    public static int upperTarget = 0;
-    public static int lowerTarget = 0;
+    public static double upperTarget = 0;
+    public static double lowerTarget = 0;
 
     private final double ticks_in_degree = (5281.1/180.0);
 
@@ -31,6 +31,8 @@ public class PIDF_Arm {
         upperArm = hwMap.get(DcMotorEx.class, Constants.Arm.upperArm);
         lowerArm = hwMap.get(DcMotorEx.class, Constants.Arm.lowerArm);
         upperArm.setDirection(DcMotorSimple.Direction.REVERSE);
+        upperArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lowerArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public int getUpperPos() {
@@ -61,6 +63,11 @@ public class PIDF_Arm {
         lowerTarget = Constants.Arm.UPPER_BASKET[1];
     }
 
+    public static void moveArm(double upperTarget, double lowerTarget) {
+        PIDF_Arm.upperTarget = upperTarget;
+        PIDF_Arm.lowerTarget = lowerTarget;
+    }
+
     public void setControl(Gamepad gamepad) {
         upperController.setPID(upperP, upperI, upperD);
         lowerController.setPID(lowerP, lowerI, lowerD);
@@ -73,6 +80,9 @@ public class PIDF_Arm {
 
         double upperPower = upperPid + upperff;
         double lowerPower = lowerPid + lowerff;
+
+        double leftYJoystick = -gamepad.left_stick_y;
+        double rightYJoystick = -gamepad.right_stick_y;
 
         upperArm.setPower(upperPower);
         lowerArm.setPower(lowerPower);
@@ -94,6 +104,12 @@ public class PIDF_Arm {
         }
         else if (gamepad.y) {
             armToUpperBasketPos();
+        }
+        else if (leftYJoystick < -0.1 || leftYJoystick > 0.1) {
+            upperTarget += leftYJoystick * 30;
+        }
+        else if (rightYJoystick < -0.1 || rightYJoystick > 0.1) {
+            lowerTarget += rightYJoystick * 30;
         }
     }
 

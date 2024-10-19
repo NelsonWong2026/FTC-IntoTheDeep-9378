@@ -15,6 +15,7 @@ public class Intake {
 
     public void init(HardwareMap hwMap) {
         intake = hwMap.get(DcMotor.class, Constants.Intake.intake);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /*public class IntakeSample implements Action {
