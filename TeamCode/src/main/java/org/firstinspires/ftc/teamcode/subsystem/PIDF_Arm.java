@@ -41,6 +41,26 @@ public class PIDF_Arm {
         return lowerArm.getCurrentPosition();
     }
 
+    public void armToStartPos() {
+        upperTarget = Constants.Arm.START[0];
+        lowerTarget = Constants.Arm.START[1];
+    }
+
+    public void armToIntakePos() {
+        upperTarget = Constants.Arm.INTAKE[0];
+        lowerTarget = Constants.Arm.INTAKE[1];
+    }
+
+    public void armToLowerBasketPos() {
+        upperTarget = Constants.Arm.LOWER_BASKET[0];
+        lowerTarget = Constants.Arm.LOWER_BASKET[1];
+    }
+
+    public void armToUpperBasketPos() {
+        upperTarget = Constants.Arm.UPPER_BASKET[0];
+        lowerTarget = Constants.Arm.UPPER_BASKET[1];
+    }
+
     public void setControl(Gamepad gamepad) {
         upperController.setPID(upperP, upperI, upperD);
         lowerController.setPID(lowerP, lowerI, lowerD);
@@ -64,20 +84,16 @@ public class PIDF_Arm {
             lowerArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         else if (gamepad.dpad_down) {
-            upperTarget = Constants.Arm.START[0];
-            lowerTarget = Constants.Arm.START[1];
+            armToStartPos();
         }
         else if (gamepad.dpad_up) {
-            upperTarget = Constants.Arm.INTAKE[0];
-            lowerTarget = Constants.Arm.INTAKE[1];
+            armToIntakePos();
         }
         else if (gamepad.x) {
-            upperTarget = Constants.Arm.LOWER_BASKET[0];
-            lowerTarget = Constants.Arm.LOWER_BASKET[1];
+            armToLowerBasketPos();
         }
         else if (gamepad.y) {
-            upperTarget = Constants.Arm.UPPER_BASKET[0];
-            lowerTarget = Constants.Arm.UPPER_BASKET[1];
+            armToUpperBasketPos();
         }
     }
 
