@@ -70,7 +70,17 @@ public class EasyOpenCV extends LinearOpMode {
 
         controlHubCam.setPipeline(new YellowBlobDetectionPipeline());
 
-        controlHubCam.openCameraDevice();
+        controlHubCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
         controlHubCam.startStreaming(CAMERA_WIDTH, CAMERA_HEIGHT, OpenCvCameraRotation.UPRIGHT);
     }
 
@@ -150,5 +160,7 @@ public class EasyOpenCV extends LinearOpMode {
         return distance;
     }
 
-    private double getAngle()
+    /*private double getAngle() {
+
+    }*/
 }
