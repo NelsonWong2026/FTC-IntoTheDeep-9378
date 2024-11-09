@@ -15,7 +15,7 @@ public class MeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 17.75)
                 .build();
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(35,-60, Math.toRadians(90)))
+        /*myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(35,-60, Math.toRadians(90)))
                 .splineToLinearHeading(new Pose2d(35.0,-27.0, Math.toRadians(0)), Math.toRadians(90))
                 //pickup
                 .splineToLinearHeading(new Pose2d(54.0,-54.0, Math.toRadians(-45)), Math.toRadians(50))
@@ -30,17 +30,17 @@ public class MeepMeepTesting {
                 //pickup
                 .splineToLinearHeading(new Pose2d(54.0,-54.0, Math.toRadians(-45)), Math.toRadians(50))
                 //drop
-                .build());
+                .build());*/
 
-        /*
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(35,-60, Math.toRadians(90)))
+
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(35,-60, Math.toRadians(180)))
                 .setTangent(Math.toRadians(180))
                 .lineToX(45)
                 .lineToX(35)
                 .setTangent(Math.toRadians(90))
-                .lineToYLinearHeading(-37, Math.toRadians(0))
+                .lineToYLinearHeading(-37, Math.toRadians(180))
                 .lineToY(-13)
-                .strafeToLinearHeading(new Vector2d(45, -13), Math.toRadians(-90))
+                .strafeToLinearHeading(new Vector2d(45, -13), Math.toRadians(90))
                 .setTangent(Math.toRadians(90))
                 .lineToY(-57)
                 .lineToY(-13)

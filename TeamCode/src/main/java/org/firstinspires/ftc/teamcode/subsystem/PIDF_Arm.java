@@ -106,10 +106,10 @@ public class PIDF_Arm {
             armToUpperBasketPos();
         }
         else if (leftYJoystick < -0.1 || leftYJoystick > 0.1) {
-            upperTarget += leftYJoystick * 30;
+            upperTarget += leftYJoystick * 45;
         }
         else if (rightYJoystick < -0.1 || rightYJoystick > 0.1) {
-            lowerTarget += rightYJoystick * 30;
+            lowerTarget += rightYJoystick * 45;
         }
     }
 

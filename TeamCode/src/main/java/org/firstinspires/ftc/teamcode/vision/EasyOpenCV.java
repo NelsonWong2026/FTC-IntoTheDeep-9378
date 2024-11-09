@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,10 +25,12 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-@Disabled
+@Config
 @TeleOp(name = "OpenCV Testing")
 public class EasyOpenCV extends LinearOpMode {
 
+    public static double lowerYellowH = 10, lowerYellowS = 86.5, lowerYellowV = 116,
+            upperYellowH = 30, upperYellowS = 255, upperYellowV = 255;
     double cX = 0;
     double cY = 0;
     double width = 0;
@@ -37,6 +40,10 @@ public class EasyOpenCV extends LinearOpMode {
     private static final int CAMERA_HEIGHT = 480;
     public static final double objectWidthInRealWorldUnits = 3.5;
     public static final double focalLength = 4;
+
+    Mat hierarchy = new Mat();
+    Mat hsvFrame = new Mat();
+    Mat yellowMask = new Mat();
 
     @Override
     public void runOpMode() {
@@ -73,7 +80,6 @@ public class EasyOpenCV extends LinearOpMode {
             Mat yellowMask = preprocessFrame(input);
 
             List<MatOfPoint> contours = new ArrayList<>();
-            Mat hierarchy = new Mat();
             Imgproc.findContours(yellowMask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
             MatOfPoint largestContour = findLargestContour(contours);
@@ -86,8 +92,10 @@ public class EasyOpenCV extends LinearOpMode {
                 String widthLabel = "Width: " + (int) width + " pixels";
                 Imgproc.putText(input, widthLabel, new Point(cX + 10, cY + 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
 
-                String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
-                Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
+                /*String distanceLabel = "Distance: " + String.format("%.2f", getDistance(width)) + " inches";
+                Imgproc.putText(input, distanceLabel, new Point(cX + 10, cY + 60), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);*/
+
+
 
                 Moments moments = Imgproc.moments(largestContour);
                 cX = moments.get_m10() / moments.get_m00();
@@ -103,13 +111,11 @@ public class EasyOpenCV extends LinearOpMode {
         }
 
         private Mat preprocessFrame(Mat frame) {
-            Mat hsvFrame = new Mat();
-            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_BGR2HSV);
+            Imgproc.cvtColor(frame, hsvFrame, Imgproc.COLOR_RGB2HSV);
 
-            Scalar lowerYellow = new Scalar(100, 100, 100);
-            Scalar upperYellow = new Scalar(100, 255, 255);
+            Scalar lowerYellow = new Scalar(lowerYellowH, lowerYellowS, lowerYellowH);
+            Scalar upperYellow = new Scalar(upperYellowH, upperYellowS, upperYellowV);
 
-            Mat yellowMask = new Mat();
             Core.inRange(hsvFrame, lowerYellow, upperYellow, yellowMask);
 
             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
@@ -143,4 +149,6 @@ public class EasyOpenCV extends LinearOpMode {
         double distance = (objectWidthInRealWorldUnits * focalLength) / width;
         return distance;
     }
+
+    private double getAngle()
 }
