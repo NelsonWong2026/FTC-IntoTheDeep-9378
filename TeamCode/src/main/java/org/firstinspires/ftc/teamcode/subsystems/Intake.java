@@ -101,16 +101,17 @@ public class Intake extends SDKSubsystem {
 
     public void clawOpen(boolean open) {
         if (open) {
-            intake.get().setPosition(0.6);
+            intake.get().setPosition(clawOpenPos);
         }
         else {
-            intake.get().setPosition(0);
+            intake.get().setPosition(clawClosedPos);
         }
     }
 
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
-        intakePivotLeft.get().setDirection(Servo.Direction.REVERSE);
+        intakePivotRight.get().setDirection(Servo.Direction.REVERSE);
+        intake.get().setDirection(Servo.Direction.REVERSE);
     }
 
     public Lambda setIntakePivot(IntakePivotState intakePivotState) {

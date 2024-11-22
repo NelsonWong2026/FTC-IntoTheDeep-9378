@@ -40,6 +40,9 @@ public class Constants {
         public static final double specimenScoringPos = 0.0;
         public static final double intakePos = 0.0;
         public static final double homePos = 0.0;
+        public static final double clawOpenPos = 0.0;
+        public static final double clawClosedPos = 0.0;
+        public static final double rotationPos = 0.0;
     }
 
 
