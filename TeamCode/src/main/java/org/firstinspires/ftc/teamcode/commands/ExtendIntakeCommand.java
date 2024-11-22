@@ -18,18 +18,15 @@ import dev.frozenmilk.mercurial.commands.groups.Sequential;
 import dev.frozenmilk.mercurial.commands.util.Wait;
 
 public class ExtendIntakeCommand implements Command {
-    Intake intake = new Intake();
-    Slides slides = new Slides();
-
     @Override
     public void initialise() {
         new Parallel(
-                slides.setSlidePosition(SlideState.INTAKE),
+                Slides.INSTANCE.setSlidePosition(SlideState.INTAKE),
                 new Sequential(
                         new Wait(1),
                         new Parallel(
-                                intake.setIntakePivot(IntakePivotState.INTAKE),
-                                intake.setClawOpen(false)
+                                Intake.INSTANCE.setIntakePivot(IntakePivotState.INTAKE),
+                                Intake.INSTANCE.setClawOpen(false)
                         )
                 )
         );
@@ -50,13 +47,15 @@ public class ExtendIntakeCommand implements Command {
         return true;
     }
 
+    private final HashSet<Object> requirements = new HashSet<>(); {
+        requirements.add(Intake.INSTANCE);
+        requirements.add(Slides.INSTANCE);
+    }
+
     @NonNull
     @Override
     public Set<Object> getRequirements() {
-        Set<Object> returnset = new HashSet<>();
-        returnset.add(intake);
-        returnset.add(slides);
-        return (returnset);
+        return requirements;
     }
 
     @NonNull

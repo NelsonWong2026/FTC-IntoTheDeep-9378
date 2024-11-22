@@ -23,9 +23,9 @@ public class MainTeleOp extends OpMode {
     public void init() {
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.robotCentricDriveCommand());
         Mercurial.gamepad2().a()
-                .onTrue(new SetArmCommand(HOME));
+                .onTrue(Arm.INSTANCE.setArmPosition(HOME));
         Mercurial.gamepad2().b()
-                .onTrue(new SetArmCommand(HIGH_SCORING));
+                .onTrue(Arm.INSTANCE.setArmPosition(HIGH_SCORING));
         Mercurial.gamepad2().x()
                 .onTrue(new RetractIntakeCommand());
         Mercurial.gamepad2().y()

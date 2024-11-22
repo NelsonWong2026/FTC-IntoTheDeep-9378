@@ -25,14 +25,14 @@ import dev.frozenmilk.util.cell.Cell;
 
 public class Intake extends SDKSubsystem {
     public static final Intake INSTANCE = new Intake();
-    public Intake() {}
+    private Intake() {}
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Inherited
     public @interface Attach{}
 
-    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Intake.Attach.class));
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
 
     @NonNull
     @Override
@@ -56,10 +56,10 @@ public class Intake extends SDKSubsystem {
     private static IntakePivotState intakePivotState;
 
     //hardware
-    private final Cell<CachingServo> intakePivotLeft = subsystemCell(() -> getHardwareMap().get(CachingServo.class, Constants.Intake.intakePivotLeft));
-    private final Cell<CachingServo> intakePivotRight = subsystemCell(() -> getHardwareMap().get(CachingServo.class, Constants.Intake.intakePivotRight));
-    private final Cell<CachingServo> intake = subsystemCell(() -> getHardwareMap().get(CachingServo.class, Constants.Intake.intake));
-    private final Cell<CachingServo> rotatingIntake = subsystemCell(() -> getHardwareMap().get(CachingServo.class, Constants.Intake.rotatingIntake));
+    private final Cell<CachingServo> intakePivotLeft = subsystemCell(() -> new CachingServo(getHardwareMap().get(Servo.class, Constants.Intake.intakePivotLeft)));
+    private final Cell<CachingServo> intakePivotRight = subsystemCell(() -> new CachingServo(getHardwareMap().get(Servo.class, Constants.Intake.intakePivotRight)));
+    private final Cell<CachingServo> intake = subsystemCell(() -> new CachingServo(getHardwareMap().get(Servo.class, Constants.Intake.intake)));
+    private final Cell<CachingServo> rotatingIntake = subsystemCell(() -> new CachingServo(getHardwareMap().get(Servo.class, Constants.Intake.rotatingIntake)));
 
     //set target method
     public void setPivotPosition(double position) {
@@ -97,7 +97,7 @@ public class Intake extends SDKSubsystem {
 
     public void clawOpen(boolean open) {
         if (open) {
-            intake.get().setPosition(1);
+            intake.get().setPosition(0.6);
         }
         else {
             intake.get().setPosition(0);

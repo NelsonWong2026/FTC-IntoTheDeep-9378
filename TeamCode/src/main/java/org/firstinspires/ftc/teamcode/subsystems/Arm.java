@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.Constants.Arm.*;
 import static org.firstinspires.ftc.teamcode.config.ArmPIDConfig.*;
+import org.firstinspires.ftc.teamcode.pid.DoubleComponent;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesD;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesI;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesP;
@@ -24,7 +25,6 @@ import java.lang.annotation.Target;
 
 import dev.frozenmilk.dairy.core.dependency.Dependency;
 import dev.frozenmilk.dairy.core.dependency.annotation.SingleAnnotation;
-import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
 import dev.frozenmilk.dairy.core.util.controller.implementation.DoubleController;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.CachedMotionComponentSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.EnhancedDoubleSupplier;
@@ -37,14 +37,14 @@ import dev.frozenmilk.util.cell.Cell;
 
 public class Arm extends SDKSubsystem {
     public static final Arm INSTANCE = new Arm();
-    public Arm() {}
+    private Arm() {}
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Inherited
     public @interface Attach{}
 
-    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Arm.Attach.class));
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
 
     @NonNull
     @Override
@@ -109,9 +109,9 @@ public class Arm extends SDKSubsystem {
                         leftArm.get().setPower(power);
                         rightArm.get().setPower(power);
                     },
-                    new DoubleComponent.P(MotionComponents.STATE, ArmP)
-                            .plus(new DoubleComponent.I(MotionComponents.STATE, ArmI))
-                            .plus(new DoubleComponent.D(MotionComponents.STATE, ArmD))
+                    new DoubleComponent.P(MotionComponents.STATE, () -> ArmP)
+                            .plus(new DoubleComponent.I(MotionComponents.STATE, () -> ArmI))
+                            .plus(new DoubleComponent.D(MotionComponents.STATE, () -> ArmD))
             )
     );
 
@@ -125,19 +125,19 @@ public class Arm extends SDKSubsystem {
     public void setArm(ArmState armState) {
         switch (armState) {
             case HIGH_SCORING:
-                targetPos = highScoringPos;
+                setTarget(highScoringPos);
                 break;
             case MID_SCORING:
-                targetPos = midScoringPos;
+                setTarget(midScoringPos);
                 break;
             case SPECIMEN_SCORING:
-                targetPos = specimenScoringPos;
+                setTarget(specimenScoringPos);
                 break;
             case INTAKE:
-                targetPos = intakePos;
+                setTarget(intakePos);
                 break;
             case HOME:
-                targetPos = homePos;
+                setTarget(homePos);
                 break;
         }
         Arm.armState = armState;
@@ -171,7 +171,7 @@ public class Arm extends SDKSubsystem {
     //init hook
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
-        rightArm.get().setDirection(DcMotorSimple.Direction.REVERSE);
+        leftArm.get().setDirection(DcMotorSimple.Direction.REVERSE);
         leftArm.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightArm.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller.get().setEnabled(false);
@@ -184,12 +184,13 @@ public class Arm extends SDKSubsystem {
     }
 
     public Lambda runToPosition(double target) {
-        return new Lambda("run_to_position-slides")
+        return new Lambda("run_to_position-arm")
                 .setInit(() -> setTarget(target))
                 .setFinish(() -> controller.get().finished());
     }
     public Lambda setArmPosition(ArmState armState) {
-        return new Lambda("setIntakePivot")
-                .setInit(() -> setArm(armState));
+        return new Lambda("setArmPosition")
+                .setInit(() -> setArm(armState))
+                .setFinish(() -> controller.get().finished());
     }
 }

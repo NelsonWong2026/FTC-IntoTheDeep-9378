@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import dev.frozenmilk.mercurial.commands.groups.Sequential;
 import dev.frozenmilk.mercurial.commands.util.Wait;
 
 public class SetArmCommand implements Command {
-    Arm arm = new Arm();
     Arm.ArmState armState;
 
     public SetArmCommand(Arm.ArmState armState) {
@@ -24,7 +24,7 @@ public class SetArmCommand implements Command {
 
     @Override
     public void initialise() {
-        arm.setArmPosition(armState);
+        Arm.INSTANCE.setArmPosition(armState);
     }
 
     @Override
@@ -42,12 +42,14 @@ public class SetArmCommand implements Command {
         return true;
     }
 
+    private final HashSet<Object> requirements = new HashSet<>(); {
+        requirements.add(Arm.INSTANCE);
+    }
+
     @NonNull
     @Override
     public Set<Object> getRequirements() {
-        Set<Object> returnset = new HashSet<>();
-        returnset.add(arm);
-        return (returnset);
+        return requirements;
     }
 
     @NonNull

@@ -18,16 +18,13 @@ import dev.frozenmilk.mercurial.commands.groups.Sequential;
 import dev.frozenmilk.mercurial.commands.util.Wait;
 
 public class RetractIntakeCommand implements Command {
-    Intake intake = new Intake();
-    Slides slides = new Slides();
-
     @Override
     public void initialise() {
         new Parallel(
-                intake.setIntakePivot(IntakePivotState.HOME),
+                Intake.INSTANCE.setIntakePivot(IntakePivotState.HOME),
                 new Sequential(
                         new Wait(1),
-                        slides.setSlidePosition(SlideState.HOME)
+                        Slides.INSTANCE.setSlidePosition(SlideState.HOME)
                 )
         );
     }
@@ -47,13 +44,15 @@ public class RetractIntakeCommand implements Command {
         return true;
     }
 
+    private final HashSet<Object> requirements = new HashSet<>(); {
+        requirements.add(Intake.INSTANCE);
+        requirements.add(Slides.INSTANCE);
+    }
+
     @NonNull
     @Override
     public Set<Object> getRequirements() {
-        Set<Object> returnset = new HashSet<>();
-        returnset.add(intake);
-        returnset.add(slides);
-        return (returnset);
+        return requirements;
     }
 
     @NonNull

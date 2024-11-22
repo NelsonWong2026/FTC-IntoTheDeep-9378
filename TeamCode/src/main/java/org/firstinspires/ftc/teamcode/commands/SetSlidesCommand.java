@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.commands;
 import androidx.annotation.NonNull;
 
 
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 
 import java.util.Collections;
@@ -16,7 +17,6 @@ import dev.frozenmilk.mercurial.commands.groups.Sequential;
 import dev.frozenmilk.mercurial.commands.util.Wait;
 
 public class SetSlidesCommand implements Command {
-    Slides slides = new Slides();
     Slides.SlideState slideState;
 
     public SetSlidesCommand(Slides.SlideState slideState) {
@@ -25,7 +25,7 @@ public class SetSlidesCommand implements Command {
 
     @Override
     public void initialise() {
-        slides.setSlidePosition(slideState);
+        Slides.INSTANCE.setSlidePosition(slideState);
     }
 
     @Override
@@ -43,12 +43,14 @@ public class SetSlidesCommand implements Command {
         return true;
     }
 
+    private final HashSet<Object> requirements = new HashSet<>(); {
+        requirements.add(Slides.INSTANCE);
+    }
+
     @NonNull
     @Override
     public Set<Object> getRequirements() {
-        Set<Object> returnset = new HashSet<>();
-        returnset.add(slides);
-        return (returnset);
+        return requirements;
     }
 
     @NonNull

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.Constants.Slides.*;
+import org.firstinspires.ftc.teamcode.pid.DoubleComponent;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesD;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesI;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesP;
@@ -22,7 +23,6 @@ import java.lang.annotation.Target;
 
 import dev.frozenmilk.dairy.core.dependency.Dependency;
 import dev.frozenmilk.dairy.core.dependency.annotation.SingleAnnotation;
-import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
 import dev.frozenmilk.dairy.core.util.controller.implementation.DoubleController;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.CachedMotionComponentSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.EnhancedDoubleSupplier;
@@ -35,14 +35,14 @@ import dev.frozenmilk.util.cell.Cell;
 
 public class Slides extends SDKSubsystem {
     public static final Slides INSTANCE = new Slides();
-    public Slides() {}
+    private Slides() {}
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Inherited
     public @interface Attach{}
 
-    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Slides.Attach.class));
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
 
     @NonNull
     @Override
@@ -104,9 +104,9 @@ public class Slides extends SDKSubsystem {
                     (Double power) -> {
                         slides.get().setPower(power);
                     },
-                    new DoubleComponent.P(MotionComponents.STATE, SlidesP)
-                            .plus(new DoubleComponent.I(MotionComponents.STATE, SlidesI))
-                            .plus(new DoubleComponent.D(MotionComponents.STATE, SlidesD))
+                    new DoubleComponent.P(MotionComponents.STATE, () -> SlidesP)
+                            .plus(new DoubleComponent.I(MotionComponents.STATE, () -> SlidesI))
+                            .plus(new DoubleComponent.D(MotionComponents.STATE, () -> SlidesD))
             )
     );
 
@@ -131,19 +131,19 @@ public class Slides extends SDKSubsystem {
     public void setSlides(SlideState slideState) {
         switch (slideState) {
             case HIGH_SCORING:
-                targetPos = highScoringPos;
+                setTarget(highScoringPos);
                 break;
             case MID_SCORING:
-                targetPos = midScoringPos;
+                setTarget(midScoringPos);
                 break;
             case SPECIMEN_SCORING:
-                targetPos = specimenScoringPos;
+                setTarget(specimenScoringPos);
                 break;
             case INTAKE:
-                targetPos = intakePos;
+                setTarget(intakePos);
                 break;
             case HOME:
-                targetPos = homePos;
+                setTarget(homePos);
                 break;
         }
         Slides.slideState = slideState;
@@ -177,7 +177,6 @@ public class Slides extends SDKSubsystem {
     //init hook
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
-        slides.get().setDirection(DcMotorSimple.Direction.REVERSE);
         slides.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller.get().setEnabled(false);
     }
@@ -194,7 +193,7 @@ public class Slides extends SDKSubsystem {
                 .setFinish(() -> controller.get().finished());
     }
     public Lambda setSlidePosition(SlideState slideState) {
-        return new Lambda("setIntakePivot")
+        return new Lambda("setSlidePosition")
                 .setInit(() -> setSlides(slideState));
     }
 }

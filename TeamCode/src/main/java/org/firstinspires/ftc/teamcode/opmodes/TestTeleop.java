@@ -6,6 +6,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState.HIGH_SCORIN
 import static org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState.HOME;
 import static org.firstinspires.ftc.teamcode.subsystems.Intake.IntakePivotState;
 
+import static dev.frozenmilk.mercurial.Mercurial.gamepad2;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.commands.*;
@@ -25,22 +27,26 @@ public class TestTeleop extends OpMode {
     @Override
     public void init() {
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.robotCentricDriveCommand());
-        Mercurial.gamepad2().leftBumper()
-                .onTrue(new SetArmCommand(ArmState.HOME));
-        Mercurial.gamepad2().rightBumper()
-                .onTrue(new SetArmCommand(HIGH_SCORING));
-        Mercurial.gamepad2().dpadUp()
+        gamepad2().leftBumper()
+                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.HOME));
+        gamepad2().rightBumper()
+                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.HIGH_SCORING));
+        gamepad2().dpadUp()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.HOME));
-        Mercurial.gamepad2().dpadRight()
+        gamepad2().dpadRight()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.INTAKE));
-        Mercurial.gamepad2().dpadLeft()
+        gamepad2().dpadLeft()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.SCORING));
-        Mercurial.gamepad2().b()
-                .onTrue(new SetSlidesCommand(SlideState.INTAKE));
-        Mercurial.gamepad2().a()
-                .onTrue(new SetSlidesCommand(SlideState.HOME));
-        Mercurial.gamepad2().x()
-                .onTrue(new SetSlidesCommand(SlideState.HIGH_SCORING));
+        gamepad2().dpadDown()
+                .onTrue(Intake.INSTANCE.setClawOpen(true));
+        gamepad2().y()
+                .onTrue(Intake.INSTANCE.setClawOpen(false));
+        gamepad2().b()
+                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.INTAKE));
+        gamepad2().a()
+                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.HOME));
+        gamepad2().x()
+                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.HIGH_SCORING));
     }
 
     @Override

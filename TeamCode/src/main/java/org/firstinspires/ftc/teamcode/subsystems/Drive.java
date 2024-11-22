@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.teamcode.Constants;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -25,14 +28,14 @@ import dev.frozenmilk.util.cell.Cell;
 
 public class Drive extends SDKSubsystem {
     public static final Drive INSTANCE = new Drive();
-    public Drive() {}
+    private Drive() {}
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Inherited
     public @interface Attach{}
 
-    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Drive.Attach.class));
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Attach.class));
 
     @NonNull
     @Override
@@ -45,15 +48,15 @@ public class Drive extends SDKSubsystem {
         this.dependency = dependency;
     }
 
-    private final Cell<CachingDcMotor> leftFront = subsystemCell(() -> getHardwareMap().get(CachingDcMotor.class, ""));
-    private final Cell<CachingDcMotor> leftBack = subsystemCell(() -> getHardwareMap().get(CachingDcMotor.class, ""));
-    private final Cell<CachingDcMotor> rightFront = subsystemCell(() -> getHardwareMap().get(CachingDcMotor.class, ""));
-    private final Cell<CachingDcMotor> rightBack = subsystemCell(() -> getHardwareMap().get(CachingDcMotor.class, ""));
+    private final Cell<CachingDcMotor> leftFront = subsystemCell(() -> new CachingDcMotor(getHardwareMap().get(DcMotor.class, Constants.Drive.leftFront)));
+    private final Cell<CachingDcMotor> leftBack = subsystemCell(() -> new CachingDcMotor(getHardwareMap().get(DcMotor.class, Constants.Drive.leftBack)));
+    private final Cell<CachingDcMotor> rightFront = subsystemCell(() -> new CachingDcMotor(getHardwareMap().get(DcMotor.class, Constants.Drive.rightFront)));
+    private final Cell<CachingDcMotor> rightBack = subsystemCell(() -> new CachingDcMotor(getHardwareMap().get(DcMotor.class, Constants.Drive.rightBack)));
 
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
-        rightFront.get().setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.get().setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.get().setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.get().setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public Lambda robotCentricDriveCommand() {
@@ -63,7 +66,7 @@ public class Drive extends SDKSubsystem {
 
                 })
                 .setExecute(() -> {
-                    double y = -gamepad1.leftStickY().state();
+                    double y = gamepad1.leftStickY().state();
                     double x = gamepad1.leftStickX().state() * 1.1;
                     double rx = gamepad1.rightStickX().state();
 
@@ -77,6 +80,10 @@ public class Drive extends SDKSubsystem {
                     leftBack.get().setPower(backLeftPower);
                     rightFront.get().setPower(frontRightPower);
                     rightBack.get().setPower(backRightPower);
+                    /*leftFront.get().setPower(y);
+                    leftBack.get().setPower(y);
+                    rightFront.get().setPower(-gamepad1.rightStickY().state());
+                    rightBack.get().setPower(-gamepad1.rightStickY().state());*/
                 })
                 .setFinish(() -> false);
     }
