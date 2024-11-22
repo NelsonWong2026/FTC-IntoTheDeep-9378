@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import static dev.frozenmilk.dairy.pasteurized.Pasteurized.gamepad1;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,6 +25,7 @@ public class SlidesPIDTuning extends OpMode {
     public void init() {
         /*increase = Pasteurized.gamepad1().a();
         decrease = Pasteurized.gamepad1().b();*/
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
     }
 
     @Override
@@ -35,7 +38,8 @@ public class SlidesPIDTuning extends OpMode {
         }
 
         SLIDES.runToPosition(position);
-        telemetry.addData("Position: ", position);
+        telemetry.addData("Target: ", position);
+        telemetry.addData("Position: ", SLIDES.getEncoder());
         telemetry.update();
     }
 }
