@@ -80,7 +80,7 @@ public class Arm extends SDKSubsystem {
     //controller
     private double targetPos = 0.0;
     private double targetVel = 0.0;
-    private double posTolerance = 30.0;
+    private double posTolerance = 100.0;
     private double velTolerance = 1.0;
     private final CachedMotionComponentSupplier<Double> targetSupplier = new CachedMotionComponentSupplier<>(motionComponent -> {
         if (motionComponent == MotionComponents.STATE) {
@@ -118,6 +118,7 @@ public class Arm extends SDKSubsystem {
 
     //set Target method
     public void setTarget(double target) {
+        controller.get().setEnabled(true);
         this.targetPos = target;
         targetSupplier.reset();
     }
@@ -190,7 +191,6 @@ public class Arm extends SDKSubsystem {
     }
     public Lambda setArmPosition(ArmState armState) {
         return new Lambda("setArmPosition")
-                .setInit(() -> setArm(armState))
-                .setFinish(() -> controller.get().finished());
+                .setInit(() -> setArm(armState));
     }
 }

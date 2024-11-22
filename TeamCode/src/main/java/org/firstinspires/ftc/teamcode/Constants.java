@@ -27,7 +27,7 @@ public class Constants {
         public static final double specimenScoringPos = 0.0;
         public static final double intakePos = 1600.0;
         public static final double homePos = 0.0;
-        public static final double MAX = 3100.0;
+        public static final double MAX = 3800.0;
     }
 
     @Config

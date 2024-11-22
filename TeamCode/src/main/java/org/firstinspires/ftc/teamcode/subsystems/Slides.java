@@ -76,7 +76,7 @@ public class Slides extends SDKSubsystem {
     //controller
     private double targetPos = 0.0;
     private double targetVel = 0.0;
-    private double posTolerance = 30.0;
+    private double posTolerance = 100.0;
     private double velTolerance = 1.0;
     private final CachedMotionComponentSupplier<Double> targetSupplier = new CachedMotionComponentSupplier<>(motionComponent -> {
         if (motionComponent == MotionComponents.STATE) {
@@ -177,6 +177,7 @@ public class Slides extends SDKSubsystem {
     //init hook
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
+        slides.get().setDirection(DcMotorSimple.Direction.REVERSE);
         slides.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller.get().setEnabled(false);
     }

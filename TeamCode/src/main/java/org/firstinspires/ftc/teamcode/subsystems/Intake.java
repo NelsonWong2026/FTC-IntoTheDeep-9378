@@ -91,6 +91,10 @@ public class Intake extends SDKSubsystem {
         Intake.intakePivotState = intakePivotState;
     }
 
+    public void setClawPosition(double position) {
+        intake.get().setPosition(position);
+    }
+
     public void setRotation(double rotation) {
         rotatingIntake.get().setPosition(rotation);
     }
