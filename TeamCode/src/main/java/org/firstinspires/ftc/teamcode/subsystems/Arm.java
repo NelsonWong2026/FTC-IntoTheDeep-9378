@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import static org.firstinspires.ftc.teamcode.Constants.Slides.*;
+import static org.firstinspires.ftc.teamcode.Constants.Arm.*;
+import static org.firstinspires.ftc.teamcode.config.ArmPIDConfig.*;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesD;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesI;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesP;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.config.ArmPIDConfig;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -33,16 +35,16 @@ import dev.frozenmilk.mercurial.subsystems.SDKSubsystem;
 import dev.frozenmilk.mercurial.subsystems.Subsystem;
 import dev.frozenmilk.util.cell.Cell;
 
-public class Slides extends SDKSubsystem {
-    public static final Slides INSTANCE = new Slides();
-    public Slides() {}
+public class Arm extends SDKSubsystem {
+    public static final Arm INSTANCE = new Arm();
+    public Arm() {}
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     @Inherited
     public @interface Attach{}
 
-    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Slides.Attach.class));
+    private Dependency<?> dependency = Subsystem.DEFAULT_DEPENDENCY.and(new SingleAnnotation<>(Arm.Attach.class));
 
     @NonNull
     @Override
@@ -55,7 +57,7 @@ public class Slides extends SDKSubsystem {
         this.dependency = dependency;
     }
 
-    public enum SlideState {
+    public enum ArmState {
         HIGH_SCORING,
         MID_SCORING,
         SPECIMEN_SCORING,
@@ -63,15 +65,17 @@ public class Slides extends SDKSubsystem {
         HOME
     }
 
-    public static SlideState slideState;
+    public static ArmState armState;
 
     //motors
-    private final Cell<DcMotorEx> slides = subsystemCell(() -> getHardwareMap().get(DcMotorEx.class, Constants.Slides.slides));
+    private final Cell<DcMotorEx> leftArm = subsystemCell(() -> getHardwareMap().get(DcMotorEx.class, Constants.Arm.leftArm));
+    private final Cell<DcMotorEx> rightArm = subsystemCell(() -> getHardwareMap().get(DcMotorEx.class, Constants.Arm.rightArm));
+
 
     //encoder
-    private final Cell<EnhancedDoubleSupplier> encoder = subsystemCell(() -> new EnhancedDoubleSupplier(() -> (double) slides.get().getCurrentPosition()));
+    private final Cell<EnhancedDoubleSupplier> encoder = subsystemCell(() -> new EnhancedDoubleSupplier(() -> (double) leftArm.get().getCurrentPosition()));
     //current of motor
-    private final Cell<EnhancedDoubleSupplier> current = subsystemCell(() -> new EnhancedDoubleSupplier(() -> slides.get().getCurrent(CurrentUnit.AMPS)));
+    private final Cell<EnhancedDoubleSupplier> current = subsystemCell(() -> new EnhancedDoubleSupplier(() -> leftArm.get().getCurrent(CurrentUnit.AMPS)));
 
     //controller
     private double targetPos = 0.0;
@@ -90,8 +94,8 @@ public class Slides extends SDKSubsystem {
     private final CachedMotionComponentSupplier<Double> toleranceSupplier = new CachedMotionComponentSupplier<>(motionComponent -> {
         if (motionComponent == MotionComponents.STATE) {
             return posTolerance;
-        }
-        /*else if (motionComponent == MotionComponents.VELOCITY) {
+        }/*
+        else if (motionComponent == MotionComponents.VELOCITY) {
             return velTolerance;
         }*/
         return Double.NaN;
@@ -102,34 +106,24 @@ public class Slides extends SDKSubsystem {
                     encoder.get(),
                     toleranceSupplier,
                     (Double power) -> {
-                        slides.get().setPower(power);
+                        leftArm.get().setPower(power);
+                        rightArm.get().setPower(power);
                     },
-                    new DoubleComponent.P(MotionComponents.STATE, SlidesP)
-                            .plus(new DoubleComponent.I(MotionComponents.STATE, SlidesI))
-                            .plus(new DoubleComponent.D(MotionComponents.STATE, SlidesD))
+                    new DoubleComponent.P(MotionComponents.STATE, ArmP)
+                            .plus(new DoubleComponent.I(MotionComponents.STATE, ArmI))
+                            .plus(new DoubleComponent.D(MotionComponents.STATE, ArmD))
             )
     );
 
 
     //set Target method
     public void setTarget(double target) {
-        controller.get().setEnabled(true);
         this.targetPos = target;
         targetSupplier.reset();
     }
 
-    public void retract() {
-        controller.get().setEnabled(false);
-        slides.get().setPower(-1);
-    }
-
-    public void stopSlides() {
-        slides.get().setPower(0);
-        setTarget(0);
-    }
-
-    public void setSlides(SlideState slideState) {
-        switch (slideState) {
+    public void setArm(ArmState armState) {
+        switch (armState) {
             case HIGH_SCORING:
                 targetPos = highScoringPos;
                 break;
@@ -146,7 +140,7 @@ public class Slides extends SDKSubsystem {
                 targetPos = homePos;
                 break;
         }
-        Slides.slideState = slideState;
+        Arm.armState = armState;
     }
 
     public double getVelocity() {
@@ -170,15 +164,16 @@ public class Slides extends SDKSubsystem {
     }
 
     public void resetEncoder() {
-        slides.get().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftArm.get().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         targetSupplier.reset();
     }
 
     //init hook
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
-        slides.get().setDirection(DcMotorSimple.Direction.REVERSE);
-        slides.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightArm.get().setDirection(DcMotorSimple.Direction.REVERSE);
+        leftArm.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightArm.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         controller.get().setEnabled(false);
     }
 
@@ -193,8 +188,8 @@ public class Slides extends SDKSubsystem {
                 .setInit(() -> setTarget(target))
                 .setFinish(() -> controller.get().finished());
     }
-    public Lambda setSlidePosition(SlideState slideState) {
+    public Lambda setArmPosition(ArmState armState) {
         return new Lambda("setIntakePivot")
-                .setInit(() -> setSlides(slideState));
+                .setInit(() -> setArm(armState));
     }
 }
