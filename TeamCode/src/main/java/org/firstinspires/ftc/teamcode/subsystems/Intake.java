@@ -52,8 +52,14 @@ public class Intake extends SDKSubsystem {
         HOME
     }
 
+    public enum ClawState {
+        OPEN,
+        CLOSED
+    }
+
     public boolean clawOpen;
     private static IntakePivotState intakePivotState;
+    private static ClawState clawState = ClawState.CLOSED;
 
     //hardware
     private final Cell<CachingServo> intakePivotLeft = subsystemCell(() -> new CachingServo(getHardwareMap().get(Servo.class, Constants.Intake.intakePivotLeft)));
@@ -100,11 +106,27 @@ public class Intake extends SDKSubsystem {
     }
 
     public void clawOpen(boolean open) {
+
         if (open) {
             intake.get().setPosition(clawOpenPos);
+            Intake.clawState = ClawState.OPEN;
         }
         else {
             intake.get().setPosition(clawClosedPos);
+            Intake.clawState = ClawState.CLOSED;
+        }
+    }
+
+    public void clawOpenAndClose() {
+        switch (Intake.clawState) {
+            case OPEN:
+                intake.get().setPosition(clawClosedPos);
+                Intake.clawState = ClawState.CLOSED;
+                break;
+            case CLOSED:
+                intake.get().setPosition(clawOpenPos);
+                Intake.clawState = ClawState.OPEN;
+                break;
         }
     }
 
@@ -122,5 +144,15 @@ public class Intake extends SDKSubsystem {
     public Lambda setClawOpen(boolean open) {
         return new Lambda("setClaw")
                 .setInit(() -> clawOpen(open));
+    }
+
+    public Lambda setClawOpenAndClose() {
+        return new Lambda("setClawOpenAndClose")
+                .setInit(() -> clawOpenAndClose());
+    }
+
+    public Lambda setIntakeRotation(double position) {
+        return new Lambda("setIntakeRotation")
+                .setInit(() -> setRotation(position));
     }
 }

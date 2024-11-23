@@ -57,6 +57,10 @@ public class Drive extends SDKSubsystem {
     public void preUserInitHook(@NonNull Wrapper opMode) {
         leftFront.get().setDirection(DcMotorSimple.Direction.REVERSE);
         leftBack.get().setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBack.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFront.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBack.get().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public Lambda robotCentricDriveCommand() {
@@ -80,6 +84,35 @@ public class Drive extends SDKSubsystem {
                     leftBack.get().setPower(backLeftPower);
                     rightFront.get().setPower(frontRightPower);
                     rightBack.get().setPower(backRightPower);
+                    /*leftFront.get().setPower(y);
+                    leftBack.get().setPower(y);
+                    rightFront.get().setPower(-gamepad1.rightStickY().state());
+                    rightBack.get().setPower(-gamepad1.rightStickY().state());*/
+                })
+                .setFinish(() -> false);
+    }
+
+    public Lambda slowRobotCentricDriveCommand() {
+        BoundGamepad gamepad1 = Mercurial.gamepad1();
+        return new Lambda("mecanum-drive-robot-centric")
+                .setInit(() -> {
+
+                })
+                .setExecute(() -> {
+                    double y = gamepad1.leftStickY().state();
+                    double x = gamepad1.leftStickX().state() * 1.1;
+                    double rx = gamepad1.rightStickX().state();
+
+                    double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+                    double frontLeftPower = (y + x + rx) / denominator;
+                    double backLeftPower = (y - x + rx) / denominator;
+                    double frontRightPower = (y - x - rx) / denominator;
+                    double backRightPower = (y + x - rx) / denominator;
+
+                    leftFront.get().setPower(frontLeftPower/2);
+                    leftBack.get().setPower(backLeftPower/2);
+                    rightFront.get().setPower(frontRightPower/2);
+                    rightBack.get().setPower(backRightPower/2);
                     /*leftFront.get().setPower(y);
                     leftBack.get().setPower(y);
                     rightFront.get().setPower(-gamepad1.rightStickY().state());
