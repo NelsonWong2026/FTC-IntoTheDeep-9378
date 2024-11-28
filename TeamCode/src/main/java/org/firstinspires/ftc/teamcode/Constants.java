@@ -16,9 +16,9 @@ public class Constants {
     public static final class Arm {
         public static final String leftArm = "leftArm";
         public static final String rightArm = "rightArm";
-        public static final double highScoringPos = 3900.0;
+        public static final double highScoringPos = 3200.0;
         public static final double midScoringPos = 0.0;
-        public static final double specimenScoringPos = 0.0;
+        public static final double specimenScoringPos = 2400.0;
         public static final double intakePos = 0.0;
         public static final double homePos = 0.0;
     }
@@ -26,7 +26,7 @@ public class Constants {
 
     public static final class Slides {
         public static final String slides = "slides";
-        public static final double highScoringPos = 3400.0;
+        public static final double highScoringPos = 3000.0;
         public static final double midScoringPos = 0.0;
         public static final double specimenScoringPos = 0.0;
         public static final double intakePos = 1600.0;
@@ -34,16 +34,16 @@ public class Constants {
     }
 
 
-    @Config
+
     public static final class Intake {
         public static final String intakePivotLeft = "intakePivotLeft";
         public static final String intakePivotRight = "intakePivotRight";
         public static final String intake = "intake";
         public static final String rotatingIntake = "rotatingIntake";
-        public static final double scoringPos = 0.2;
+        public static final double scoringPos = 0.4;
         public static final double specimenScoringPos = 0.0;
-        public static final double intakePos = 0.8;
-        public static final double homePos = 0.55;
+        public static final double intakePos = 1;
+        public static final double homePos = 0.72;
         public static final double clawOpenPos = 0.5;
         public static final double clawClosedPos = 0.23;
         public static final double rotation0Pos = 0.5;

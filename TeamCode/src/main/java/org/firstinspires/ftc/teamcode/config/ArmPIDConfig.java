@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class ArmPIDConfig {
     //PID Values
-    public static Double ArmP = (double) 0.0006;
-    public static Double ArmI = (double) 0;
-    public static Double ArmD = (double) 0.0001;
+    public static double ArmP = 0.0014;
+    public static double ArmI = 0;
+    public static double ArmD = 0.0001;
 }

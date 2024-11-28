@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.Constants.Intake.*;
+import static org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState.HIGH_SCORING;
+import static org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState.HOME;
 
 import androidx.annotation.NonNull;
 
@@ -58,7 +60,7 @@ public class Intake extends SDKSubsystem {
     }
 
     public boolean clawOpen;
-    private static IntakePivotState intakePivotState;
+    public static IntakePivotState intakePivotState;
     private static ClawState clawState = ClawState.CLOSED;
 
     //hardware
@@ -141,6 +143,21 @@ public class Intake extends SDKSubsystem {
                 .setInit(() -> setPivot(intakePivotState));
     }
 
+    public Lambda setIntakePivotDependent() {
+        Intake.IntakePivotState intakePos;
+        if (Arm.armState == HOME) {
+            intakePos = IntakePivotState.HOME;
+        }
+        else if (Arm.armState == HIGH_SCORING) {
+            intakePos = IntakePivotState.INTAKE;
+        }
+        else {
+            intakePos = IntakePivotState.HOME;
+        }
+        return new Lambda("setIntakePivotDependent")
+                .setInit(() -> setIntakePivot(intakePos));
+    }
+
     public Lambda setClawOpen(boolean open) {
         return new Lambda("setClaw")
                 .setInit(() -> clawOpen(open));
@@ -155,4 +172,5 @@ public class Intake extends SDKSubsystem {
         return new Lambda("setIntakeRotation")
                 .setInit(() -> setRotation(position));
     }
+
 }

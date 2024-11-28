@@ -31,8 +31,10 @@ public class ArmPIDTuning extends OpMode {
 
     @Override
     public void init() {
+        //just to make arm tuned in a similar environment to when everything is running
+        //ignore everything in init
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.robotCentricDriveCommand());
+        Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
         gamepad2().leftBumper()
                 .onTrue(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME));
         gamepad2().rightBumper()

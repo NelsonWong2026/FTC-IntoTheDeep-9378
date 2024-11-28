@@ -26,7 +26,7 @@ import dev.frozenmilk.mercurial.Mercurial;
 public class TestTeleop extends OpMode {
     @Override
     public void init() {
-        Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.robotCentricDriveCommand());
+        Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
         gamepad2().leftBumper()
                 .onTrue(Arm.INSTANCE.setArmPosition(ArmState.HOME));
         gamepad2().rightBumper()

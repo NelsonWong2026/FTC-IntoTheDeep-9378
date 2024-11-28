@@ -25,13 +25,14 @@ import dev.frozenmilk.mercurial.Mercurial;
 @Drive.Attach
 @Slides.Attach
 @Config
-@TeleOp(name="SlidesPIDTuning", group = "Tuning")
-public class SlidesPIDTuning extends OpMode {
-    public static double target = 0;
+@TeleOp(name="Tuning", group = "Tuning")
+public class Tuning extends OpMode {
+    public static double armTarget, slidesTarget, pivot, intake = 0;
+    public static double rotate = 0.5;
 
     @Override
     public void init() {
-        //just to make slides tuned in a similar environment to when everything is running
+        //just to make arm tuned in a similar environment to when everything is running
         //ignore everything in init
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
@@ -59,9 +60,15 @@ public class SlidesPIDTuning extends OpMode {
 
     @Override
     public void loop() {
-        Slides.INSTANCE.setTarget(target);
-        telemetry.addData("Target: ", target);
-        telemetry.addData("Position: ", Slides.INSTANCE.getEncoder());
+        Arm.INSTANCE.setTarget(armTarget);
+        Slides.INSTANCE.setTarget(slidesTarget);
+        Intake.INSTANCE.setPivotPosition(pivot);
+        Intake.INSTANCE.setClawPosition(intake);
+        Intake.INSTANCE.setRotation(rotate);
+        telemetry.addData("Arm Target: ", armTarget);
+        telemetry.addData("Slides Target: ", slidesTarget);
+        telemetry.addData("Arm Position: ", Arm.INSTANCE.getEncoder());
+        telemetry.addData("Slides Position: ", Slides.INSTANCE.getEncoder());
         telemetry.update();
     }
 }
