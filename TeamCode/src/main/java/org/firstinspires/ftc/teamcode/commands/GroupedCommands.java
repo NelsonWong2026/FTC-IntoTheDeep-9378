@@ -38,12 +38,16 @@ public class GroupedCommands {
             return new Parallel(
                     Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE),
                     new Sequential(
-                            new Wait(0.4),
+                            new Wait(2),
                             Intake.INSTANCE.setClawOpen(true)
                     ),
                     new Sequential(
-                            new Wait(0.4),
+                            new Wait(2.5),
                             Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)
+                    ),
+                    new Sequential(
+                            new Wait(2.5),
+                            Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME)
                     )
             );
         }

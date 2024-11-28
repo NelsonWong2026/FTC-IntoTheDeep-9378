@@ -10,6 +10,7 @@ import static dev.frozenmilk.mercurial.Mercurial.gamepad2;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.commands.*;
 import org.firstinspires.ftc.teamcode.subsystems.*;
 import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState;
@@ -27,30 +28,40 @@ public class TestTeleop extends OpMode {
     @Override
     public void init() {
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
-        gamepad2().leftBumper()
-                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.HOME));
-        gamepad2().rightBumper()
+        Mercurial.gamepad2().leftBumper()
+                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.SPECIMEN_SCORING));
+        Mercurial.gamepad2().rightBumper()
                 .onTrue(Arm.INSTANCE.setArmPosition(ArmState.HIGH_SCORING));
-        gamepad2().dpadUp()
+        /*Mercurial.gamepad2().a()
+                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.SPECIMEN_SCORING));*/
+        Mercurial.gamepad2().b()
+                .onTrue(GroupedCommands.INSTANCE.setScoringCommand());
+        Mercurial.gamepad2().x()
+                .onTrue(GroupedCommands.INSTANCE.extendIntakeCommand());
+        Mercurial.gamepad2().y()
+                .onTrue(GroupedCommands.INSTANCE.setHomeCommand());
+        Mercurial.gamepad2().dpadUp()
+                .onTrue(Intake.INSTANCE.setClawOpenAndClose());
+        Mercurial.gamepad2().dpadDown()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.HOME));
-        gamepad2().dpadRight()
+        Mercurial.gamepad2().dpadLeft()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.INTAKE));
-        gamepad2().dpadLeft()
+        Mercurial.gamepad2().dpadRight()
                 .onTrue(Intake.INSTANCE.setIntakePivot(IntakePivotState.SCORING));
-        gamepad2().dpadDown()
-                .onTrue(Intake.INSTANCE.setClawOpen(true));
-        gamepad2().y()
-                .onTrue(Intake.INSTANCE.setClawOpen(false));
-        gamepad2().b()
-                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.INTAKE));
-        gamepad2().a()
-                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.HOME));
-        gamepad2().x()
-                .onTrue(Slides.INSTANCE.setSlidePosition(SlideState.HIGH_SCORING));
+        Mercurial.gamepad2().leftStickButton()
+                .onTrue(Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation0Pos));
+        Mercurial.gamepad2().rightStickButton()
+                .onTrue(Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation90Pos));
+
     }
 
     @Override
     public void loop() {
-
+        if (Mercurial.gamepad1().rightBumper().onTrue()) {
+            Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.slowDriveCommand(true));
+        }
+        if (Mercurial.gamepad1().rightBumper().onFalse()) {
+            Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
+        }
     }
 }
