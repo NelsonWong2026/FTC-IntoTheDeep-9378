@@ -38,8 +38,8 @@ public class TestTeleop extends OpMode {
                 .onTrue(GroupedCommands.INSTANCE.setScoringCommand());
         Mercurial.gamepad2().x()
                 .onTrue(GroupedCommands.INSTANCE.extendIntakeCommand());
-        Mercurial.gamepad2().y()
-                .onTrue(GroupedCommands.INSTANCE.setHomeCommand());
+        /*Mercurial.gamepad2().y()
+                .onTrue(GroupedCommands.INSTANCE.setHomeCommand());*/
         Mercurial.gamepad2().dpadUp()
                 .onTrue(Intake.INSTANCE.setClawOpenAndClose());
         Mercurial.gamepad2().dpadDown()

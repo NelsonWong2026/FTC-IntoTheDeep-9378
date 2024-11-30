@@ -18,7 +18,7 @@ public class Constants {
         public static final String rightArm = "rightArm";
         public static final double highScoringPos = 3200.0;
         public static final double midScoringPos = 0.0;
-        public static final double specimenScoringPos = 2400.0;
+        public static final double specimenScoringPos = 1800.0;
         public static final double intakePos = 0.0;
         public static final double homePos = 0.0;
     }
@@ -46,6 +46,7 @@ public class Constants {
         public static final double homePos = 0.72;
         public static final double clawOpenPos = 0.5;
         public static final double clawClosedPos = 0.23;
+        public static final double clawRegripPos = 0.26;
         public static final double rotation0Pos = 0.5;
         public static final double rotation90Pos = 0.83;
     }

@@ -11,8 +11,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakePivotState;
 import org.firstinspires.ftc.teamcode.subsystems.Slides.SlideState;
 
-import java.security.acl.Group;
-
 import dev.frozenmilk.mercurial.Mercurial;
 import dev.frozenmilk.mercurial.commands.groups.Parallel;
 import dev.frozenmilk.mercurial.commands.groups.Sequential;
@@ -28,8 +26,10 @@ public class MainTeleOp extends OpMode {
     @Override
     public void init() {
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
+        Mercurial.gamepad1().b()
+                .onTrue(GroupedCommands.INSTANCE.regripSpecimen());
         Mercurial.gamepad2().leftBumper()
-                .onTrue(Arm.INSTANCE.setArmPosition(ArmState.SPECIMEN_SCORING));
+                .onTrue(GroupedCommands.INSTANCE.setSpecimenCommand());
         Mercurial.gamepad2().rightBumper()
                 .onTrue(GroupedCommands.INSTANCE.scoreSpecimenCommand());
         Mercurial.gamepad2().a()
@@ -52,7 +52,6 @@ public class MainTeleOp extends OpMode {
                 .onTrue(Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation0Pos));
         Mercurial.gamepad2().rightStickButton()
                 .onTrue(Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation90Pos));
-
     }
 
     @Override

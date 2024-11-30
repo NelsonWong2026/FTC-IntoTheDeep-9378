@@ -173,4 +173,9 @@ public class Intake extends SDKSubsystem {
                 .setInit(() -> setRotation(position));
     }
 
+    public Lambda clawRegrip() {
+        return new Lambda("clawRegrip")
+                .setInit(() -> setClawPosition(clawRegripPos));
+    }
+
 }
