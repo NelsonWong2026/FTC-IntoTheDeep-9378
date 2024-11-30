@@ -14,7 +14,7 @@ public class GroupedCommands {
     public static final GroupedCommands INSTANCE = new GroupedCommands();
     private GroupedCommands() {}
 
-    public CommandGroup setHomeCommand() {
+    /*public CommandGroup setHomeCommand() {
         if (Arm.armState == Arm.ArmState.HIGH_SCORING) {
             return new Parallel(
                     Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
@@ -58,6 +58,45 @@ public class GroupedCommands {
                     Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
             );
         }
+    }*/
+
+    public CommandGroup intakeToHomeCommand() {
+        return new Parallel(
+                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
+                Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
+        );
+    }
+
+    public CommandGroup scoringToHomeCommand() {
+        return new Parallel(
+                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
+                new Sequential(
+                        new Wait(0.3),
+                        Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
+                ),
+                new Sequential(
+                        new Wait(1),
+                        Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)
+                )
+        );
+    }
+
+    public CommandGroup scoreSpecimenCommand() {
+        return new Parallel(
+                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE),
+                new Sequential(
+                        new Wait(2),
+                        Intake.INSTANCE.setClawOpen(true)
+                ),
+                new Sequential(
+                        new Wait(2.5),
+                        Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)
+                ),
+                new Sequential(
+                        new Wait(2.5),
+                        Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME)
+                )
+        );
     }
 
     public CommandGroup extendIntakeCommand() {

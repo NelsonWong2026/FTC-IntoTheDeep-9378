@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Arm.ArmState;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakePivotState;
 import org.firstinspires.ftc.teamcode.subsystems.Slides.SlideState;
 
+import java.security.acl.Group;
+
 import dev.frozenmilk.mercurial.Mercurial;
 import dev.frozenmilk.mercurial.commands.groups.Parallel;
 import dev.frozenmilk.mercurial.commands.groups.Sequential;
@@ -29,68 +31,15 @@ public class MainTeleOp extends OpMode {
         Mercurial.gamepad2().leftBumper()
                 .onTrue(Arm.INSTANCE.setArmPosition(ArmState.SPECIMEN_SCORING));
         Mercurial.gamepad2().rightBumper()
-                .onTrue(
-                        new Parallel(
-                                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE),
-                                new Sequential(
-                                        new Wait(2),
-                                        Intake.INSTANCE.setClawOpen(true)
-                                ),
-                                new Sequential(
-                                        new Wait(2.5),
-                                        Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)
-                                ),
-                                new Sequential(
-                                        new Wait(2.5),
-                                        Intake.INSTANCE.setIntakePivot(IntakePivotState.HOME)
-                                )
-                        )
-                );
+                .onTrue(GroupedCommands.INSTANCE.scoreSpecimenCommand());
         Mercurial.gamepad2().a()
-                .onTrue(
-                    new Parallel(
-                        Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
-                        Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
-                    )
-                );
+                .onTrue(GroupedCommands.INSTANCE.intakeToHomeCommand());
         Mercurial.gamepad2().b()
-                .onTrue(
-                    new Parallel(
-                            Arm.INSTANCE.setArmPosition(Arm.ArmState.HIGH_SCORING),
-                            new Sequential(
-                                    new Wait(0.7),
-                                    Slides.INSTANCE.setSlidePosition(Slides.SlideState.HIGH_SCORING)
-                            ),
-                            new Sequential(
-                                    new Wait(1.5),
-                                    Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING)
-                            )
-                    )
-                );
+                .onTrue(GroupedCommands.INSTANCE.setScoringCommand());
         Mercurial.gamepad2().x()
-                .onTrue(
-                    new Parallel(
-                        Slides.INSTANCE.setSlidePosition(Slides.SlideState.INTAKE),
-                        new Sequential(
-                                new Wait(0.5),
-                                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE)
-                        )
-                    )
-                );
+                .onTrue(GroupedCommands.INSTANCE.extendIntakeCommand());
         Mercurial.gamepad2().y()
-                .onTrue(
-                    new Parallel(
-                        Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
-                        new Sequential(
-                                new Wait(0.3),
-                                Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
-                        ),
-                        new Sequential(
-                                new Wait(1),
-                                Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)
-                        )
-                    )
-                );
+                .onTrue(GroupedCommands.INSTANCE.scoringToHomeCommand());
         Mercurial.gamepad2().dpadUp()
                 .onTrue(Intake.INSTANCE.setClawOpenAndClose());
         Mercurial.gamepad2().dpadDown()
