@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TrajectoryActionBuilder;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive;
@@ -29,6 +30,7 @@ import dev.frozenmilk.mercurial.Mercurial;
 @Mercurial.Attach
 @Config
 @Autonomous(name = "the 3 piece", group = "Autonomous")
+@Disabled
 public class LeftSideAuto extends OpMode {
     private final Pose2d initialPose = new Pose2d(-38, -61.5, Math.toRadians(90));
     private Action path0, scoring, path2, path3, path4, piece2, path6, park, score2;
@@ -41,28 +43,28 @@ public class LeftSideAuto extends OpMode {
     public void init_loop(){
         TrajectoryActionBuilder tab0 = drive.actionBuilder(initialPose)
                 .setTangent(180)
-                .strafeToLinearHeading(new Vector2d(-52,-52), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-52,-55), Math.toRadians(45));
 
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(-52,-52, Math.toRadians(45)))
-                .strafeToLinearHeading(new Vector2d(-52.5,-52.5), Math.toRadians(45));
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(-52,-55, Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(-58,-55), Math.toRadians(45));
 
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-52.5,-52.5, Math.toRadians(90)))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-58,-55, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-56,-56));
 
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-58.5,-38), Math.toRadians(90));
+                .strafeToLinearHeading(new Vector2d(-58.5,-34), Math.toRadians(90));
 
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-58.5,-38, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-52.5,-52.5), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-58,-55), Math.toRadians(45));
 
         TrajectoryActionBuilder score = drive.actionBuilder(new Pose2d(-50,-38, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-52.5,-52.5), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-58,-55), Math.toRadians(45));
 
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-58.5,-38, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-50,-36), Math.toRadians(95));
+                .strafeToLinearHeading(new Vector2d(-50,-38), Math.toRadians(90));
 
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-52.5,-52.5, Math.toRadians(45)))
-                .strafeToLinearHeading(new Vector2d(-48.5,-38), Math.toRadians(90));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-58,-55, Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(-48.5,-36), Math.toRadians(90));
 
         TrajectoryActionBuilder end = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-50,-16), Math.toRadians(0))
@@ -73,10 +75,10 @@ public class LeftSideAuto extends OpMode {
         path2 = tab2.build();
         path3 = tab3.build();
         path4 = tab4.build();
-        piece2 = tab5.build();
-        score2 = score.build();
         path6 = tab6.build();
+        piece2 = tab5.build();
         park = end.build();
+        score2 = score.build();
     }
 
     @Override
@@ -92,7 +94,7 @@ public class LeftSideAuto extends OpMode {
                         new SleepAction(0.5),
                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING)),
                         scoring,
-                        new SleepAction(0.5),
+                        new SleepAction(1),
                         new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                         new SleepAction(0.5),
                         path2,
@@ -110,7 +112,7 @@ public class LeftSideAuto extends OpMode {
                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE)),
                         new SleepAction(0.5),
                         new MercurialAction(Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)),
-                        new SleepAction(2),
+                        new SleepAction(1),
                         new MercurialAction(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)),
                         //go home
                         new SleepAction(0.2),
@@ -137,7 +139,7 @@ public class LeftSideAuto extends OpMode {
                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE)),
                         new SleepAction(0.5),
                         new MercurialAction(Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)),
-                        new SleepAction(2),
+                        new SleepAction(1),
                         new MercurialAction(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)),
                         //go home
                         score2,
@@ -167,6 +169,5 @@ public class LeftSideAuto extends OpMode {
     public void loop() {
     }
 }
-
 
 

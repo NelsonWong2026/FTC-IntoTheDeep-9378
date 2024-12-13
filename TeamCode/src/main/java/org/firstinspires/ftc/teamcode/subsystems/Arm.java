@@ -186,8 +186,8 @@ public class Arm extends SDKSubsystem {
 
     public Lambda runToPosition(double target) {
         return new Lambda("run_to_position-arm")
-                .setInit(() -> setTarget(target))
-                .setFinish(() -> controller.get().finished());
+                .setInit(() -> setTarget(target));
+                //.setFinish(() -> controller.get().finished());
     }
     public Lambda setArmPosition(ArmState armState) {
         return new Lambda("setArmPosition")

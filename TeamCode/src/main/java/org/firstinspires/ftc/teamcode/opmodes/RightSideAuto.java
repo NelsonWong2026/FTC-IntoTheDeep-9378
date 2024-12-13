@@ -11,6 +11,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -38,6 +39,7 @@ import dev.frozenmilk.mercurial.commands.util.Wait;
 @Mercurial.Attach
 @Config
 @Autonomous(name = "specimen auto", group = "Autonomous")
+@Disabled
 public class RightSideAuto extends OpMode {
     private final Pose2d initialPose = new Pose2d(9, -62, Math.toRadians(-90));
     private Action scoring, pickup, score2, park, path2, path3, path4, piece2, path6;

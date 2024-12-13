@@ -76,7 +76,7 @@ public class Slides extends SDKSubsystem {
     //controller
     private double targetPos = 0.0;
     private double targetVel = 0.0;
-    private double posTolerance = 50.0;
+    private double posTolerance = 100.0;
     private double velTolerance = 1.0;
     private final CachedMotionComponentSupplier<Double> targetSupplier = new CachedMotionComponentSupplier<>(motionComponent -> {
         if (motionComponent == MotionComponents.STATE) {

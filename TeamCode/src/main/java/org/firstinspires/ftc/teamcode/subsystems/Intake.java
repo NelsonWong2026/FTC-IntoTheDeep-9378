@@ -48,6 +48,7 @@ public class Intake extends SDKSubsystem {
     }
 
     public enum IntakePivotState {
+        START,
         SCORING,
         SPECIMEN_SCORING,
         INTAKE,
@@ -60,7 +61,7 @@ public class Intake extends SDKSubsystem {
     }
 
     public boolean clawOpen;
-    public static IntakePivotState intakePivotState;
+    public static IntakePivotState intakePivotState = IntakePivotState.START;
     private static ClawState clawState = ClawState.CLOSED;
 
     //hardware
@@ -95,6 +96,9 @@ public class Intake extends SDKSubsystem {
                 intakePivotLeft.get().setPosition(homePos);
                 intakePivotRight.get().setPosition(homePos);
                 break;
+            case START:
+                intakePivotLeft.get().setPosition(startPos);
+                intakePivotRight.get().setPosition(startPos);
         }
         Intake.intakePivotState = intakePivotState;
     }
@@ -168,6 +172,11 @@ public class Intake extends SDKSubsystem {
                 .setInit(() -> clawOpenAndClose());
     }
 
+    public Lambda setClawPos(double pos) {
+        return new Lambda("SetClawPos")
+                .setInit(() -> setClawPosition(pos));
+    }
+
     public Lambda setIntakeRotation(double position) {
         return new Lambda("setIntakeRotation")
                 .setInit(() -> setRotation(position));
@@ -176,6 +185,14 @@ public class Intake extends SDKSubsystem {
     public Lambda clawRegrip() {
         return new Lambda("clawRegrip")
                 .setInit(() -> setClawPosition(clawRegripPos));
+    }
+
+    public Lambda setIntakePivotPosition(double position) {
+        return new Lambda("setIntakePivotPosition")
+                .setInit(() -> {
+                    intakePivotLeft.get().setPosition(position);
+                    intakePivotRight.get().setPosition(position);
+                });
     }
 
 }

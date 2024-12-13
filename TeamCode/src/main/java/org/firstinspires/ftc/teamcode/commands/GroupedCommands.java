@@ -141,7 +141,7 @@ public class GroupedCommands {
     public CommandGroup setSpecimenBackwardsCommand() {
         return new Parallel(
                 Arm.INSTANCE.runToPosition(4000),
-                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME)
+                Intake.INSTANCE.setIntakePivotPosition(0.54)
         );
     }
 

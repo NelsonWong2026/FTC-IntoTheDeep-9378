@@ -28,10 +28,12 @@ public class MainTeleOp extends OpMode {
         Drive.INSTANCE.setDefaultCommand(Drive.INSTANCE.driveCommand(true));
         Mercurial.gamepad1().b()
                 .onTrue(GroupedCommands.INSTANCE.regripSpecimen());
+        Mercurial.gamepad1().leftBumper()
+                .onTrue(Intake.INSTANCE.setIntakePivotPosition(0.88));
         Mercurial.gamepad2().leftBumper()
                 .onTrue(GroupedCommands.INSTANCE.setSpecimenCommand());
         Mercurial.gamepad2().rightBumper()
-                .onTrue(GroupedCommands.INSTANCE.scoreSpecimenCommand());
+                .onTrue(GroupedCommands.INSTANCE.setSpecimenBackwardsCommand());
         Mercurial.gamepad2().a()
                 .onTrue(GroupedCommands.INSTANCE.intakeToHomeCommand());
         Mercurial.gamepad2().b()
