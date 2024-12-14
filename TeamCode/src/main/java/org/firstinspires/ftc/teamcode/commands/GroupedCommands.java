@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
@@ -72,6 +73,7 @@ public class GroupedCommands {
                 Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME),
                 new Sequential(
                         new Wait(0.3),
+                        Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation0Pos),
                         Slides.INSTANCE.setSlidePosition(Slides.SlideState.HOME)
                 ),
                 new Sequential(
@@ -117,6 +119,20 @@ public class GroupedCommands {
     }
 
     public CommandGroup setScoringCommand() {
+        return new Parallel(
+                Arm.INSTANCE.setArmPosition(Arm.ArmState.HIGH_SCORING),
+                Intake.INSTANCE.setIntakeRotation(Constants.Intake.rotation90Pos),
+                new Sequential(
+                        new Wait(0.7),
+                        Slides.INSTANCE.setSlidePosition(Slides.SlideState.HIGH_SCORING)
+                ),
+                new Sequential(
+                        new Wait(1.5),
+                        Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING)
+                )
+        );
+    }
+    public CommandGroup autoSetScoringCommand() {
         return new Parallel(
                 Arm.INSTANCE.setArmPosition(Arm.ArmState.HIGH_SCORING),
                 new Sequential(

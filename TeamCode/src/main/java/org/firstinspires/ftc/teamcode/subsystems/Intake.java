@@ -147,21 +147,6 @@ public class Intake extends SDKSubsystem {
                 .setInit(() -> setPivot(intakePivotState));
     }
 
-    public Lambda setIntakePivotDependent() {
-        Intake.IntakePivotState intakePos;
-        if (Arm.armState == HOME) {
-            intakePos = IntakePivotState.HOME;
-        }
-        else if (Arm.armState == HIGH_SCORING) {
-            intakePos = IntakePivotState.INTAKE;
-        }
-        else {
-            intakePos = IntakePivotState.HOME;
-        }
-        return new Lambda("setIntakePivotDependent")
-                .setInit(() -> setIntakePivot(intakePos));
-    }
-
     public Lambda setClawOpen(boolean open) {
         return new Lambda("setClaw")
                 .setInit(() -> clawOpen(open));

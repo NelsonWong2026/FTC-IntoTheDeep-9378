@@ -44,30 +44,29 @@ public class LeftSideAuto2 extends OpMode {
         TrajectoryActionBuilder tab0 = drive.actionBuilder(initialPose)
                 .strafeToLinearHeading(new Vector2d(-52,-55), Math.toRadians(45));
         TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(-52,-55, Math.toRadians(45)))
-                .strafeToLinearHeading(new Vector2d(-56,-56), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-57,-57), Math.toRadians(45));
         //move to middle sample
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(45)))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-57,-57, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-60,-38), Math.toRadians(90));
         //move to basket
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(-60,-38, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-56,-56), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-57,-57), Math.toRadians(45));
         //move to right sample
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(45)))
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-57,-57, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-49.5,-38), Math.toRadians(90));
         //move to basket
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-49.5,-38, Math.toRadians(90)))
-                .strafeToLinearHeading(new Vector2d(-56,-56), Math.toRadians(45));
+                .strafeToLinearHeading(new Vector2d(-57,-57), Math.toRadians(45));
         //move to left sample
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(45)))
-                .strafeToLinearHeading(new Vector2d(-56,-35.5), Math.toRadians(140));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-57,-57, Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(-56,-36), Math.toRadians(140));
         //move to basket
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-56,-35.5, Math.toRadians(140)))
-                .strafeToLinearHeading(new Vector2d(-56,-56), Math.toRadians(45));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-56,-36, Math.toRadians(140)))
+                .strafeToLinearHeading(new Vector2d(-57,-57), Math.toRadians(45));
         //move to park
-        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(-56,-56, Math.toRadians(45)))
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(-57,-57, Math.toRadians(45)))
                 .setTangent(90)
-                .splineToLinearHeading(new Pose2d(-35, -7, Math.toRadians(0)), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-25, -7), Math.toRadians(0));
+                .splineToLinearHeading(new Pose2d(-25, -2, Math.toRadians(0)), Math.toRadians(0));
 
         moveToBasket = tab0.build();
         score = tab1.build();
@@ -91,11 +90,12 @@ public class LeftSideAuto2 extends OpMode {
                             moveToBasket,
                             new ParallelAction(
                                 new SleepAction(2.2),
-                                new MercurialAction(GroupedCommands.INSTANCE.setScoringCommand())
+                                new MercurialAction(GroupedCommands.INSTANCE.autoSetScoringCommand())
                             )
                         ),
                         //score sample
                         score,
+                        new SleepAction(0.6),
                         new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                         new SleepAction(0.7),
                         //move to middle sample
@@ -111,7 +111,7 @@ public class LeftSideAuto2 extends OpMode {
                                 ),
                                 new SleepAction(2.2)
                         ),
-                        new MercurialAction(Slides.INSTANCE.runToPosition(200)),
+                        new MercurialAction(Slides.INSTANCE.runToPosition(300)),
                         new SleepAction(0.5),
                         //grab sample
                         new MercurialAction(Intake.INSTANCE.setClawPos(0)),
@@ -122,9 +122,10 @@ public class LeftSideAuto2 extends OpMode {
                                 score2,
                                 new ParallelAction(
                                         new SleepAction(2.2),
-                                        new MercurialAction(GroupedCommands.INSTANCE.setScoringCommand())
+                                        new MercurialAction(GroupedCommands.INSTANCE.autoSetScoringCommand())
                                 )
                         ),
+                        new SleepAction(0.6),
                         //score 2nd sample
                         new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                         new SleepAction(0.7),
@@ -141,7 +142,7 @@ public class LeftSideAuto2 extends OpMode {
                                 ),
                                 new SleepAction(2.2)
                         ),
-                        new MercurialAction(Slides.INSTANCE.runToPosition(200)),
+                        new MercurialAction(Slides.INSTANCE.runToPosition(300)),
                         new SleepAction(0.5),
                         //grab sample
                         new MercurialAction(Intake.INSTANCE.setClawPos(0)),
@@ -152,9 +153,10 @@ public class LeftSideAuto2 extends OpMode {
                                 score3,
                                 new ParallelAction(
                                         new SleepAction(2.2),
-                                        new MercurialAction(GroupedCommands.INSTANCE.setScoringCommand())
+                                        new MercurialAction(GroupedCommands.INSTANCE.autoSetScoringCommand())
                                 )
                         ),
+                        new SleepAction(0.6),
                         //score 3rd sample
                         new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                         new SleepAction(0.7),
@@ -185,11 +187,13 @@ public class LeftSideAuto2 extends OpMode {
                         //move to basket
                         new ParallelAction(
                                 score4,
+                                new MercurialAction(Intake.INSTANCE.setIntakeRotation(0)),
                                 new ParallelAction(
                                         new SleepAction(2.2),
-                                        new MercurialAction(GroupedCommands.INSTANCE.setScoringCommand())
+                                        new MercurialAction(GroupedCommands.INSTANCE.autoSetScoringCommand())
                                 )
                         ),
+                        new SleepAction(0.6),
                         //score 4th sample
                         new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                         new SleepAction(0.7),
@@ -197,7 +201,6 @@ public class LeftSideAuto2 extends OpMode {
                         new ParallelAction(
                                 new MercurialAction(GroupedCommands.INSTANCE.scoringToHomeCommand()),
                                 new MercurialAction(Intake.INSTANCE.setClawOpen(false)),
-                                new MercurialAction(Intake.INSTANCE.setIntakeRotation(0)),
                                 new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME)),
                                 new SequentialAction(
                                         new SleepAction(0.5),

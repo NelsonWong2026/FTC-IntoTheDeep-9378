@@ -33,7 +33,7 @@ public class MainTeleOp extends OpMode {
         Mercurial.gamepad2().leftBumper()
                 .onTrue(GroupedCommands.INSTANCE.setSpecimenCommand());
         Mercurial.gamepad2().rightBumper()
-                .onTrue(GroupedCommands.INSTANCE.setSpecimenBackwardsCommand());
+                .onTrue(Intake.INSTANCE.setIntakePivotPosition(0.88));
         Mercurial.gamepad2().a()
                 .onTrue(GroupedCommands.INSTANCE.intakeToHomeCommand());
         Mercurial.gamepad2().b()

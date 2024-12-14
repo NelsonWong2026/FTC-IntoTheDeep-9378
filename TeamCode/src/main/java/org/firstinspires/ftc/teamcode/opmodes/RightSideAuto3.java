@@ -60,8 +60,8 @@ public class RightSideAuto3 extends OpMode {
                 .splineToLinearHeading(new Pose2d(37, -36, Math.toRadians(45)), Math.toRadians(90));
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(37, -36, Math.toRadians(45)))
                 //move piece 1
-                .strafeToLinearHeading(new Vector2d(38, -48), Math.toRadians(-45));
-        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(38, -48, Math.toRadians(-45)))
+                .strafeToLinearHeading(new Vector2d(38, -49), Math.toRadians(-45));
+        TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(38, -49, Math.toRadians(-45)))
                 //move to piece 2
                 .strafeToLinearHeading(new Vector2d(47, -32), Math.toRadians(45));
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(47, -32, Math.toRadians(45)))
@@ -153,11 +153,11 @@ public class RightSideAuto3 extends OpMode {
                                 new MercurialAction(Intake.INSTANCE.setClawOpen(true)),
                                 //moves to sample 2
                                 new SequentialAction(
-                                        new SleepAction(0.15),
+                                        new SleepAction(0.2),
                                         moveToPiece2
                                 ),
                                 new SequentialAction(
-                                        new SleepAction(0.15),
+                                        new SleepAction(0.2),
                                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE))
                                 )
                         ),

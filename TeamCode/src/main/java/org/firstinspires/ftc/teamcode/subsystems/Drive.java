@@ -76,7 +76,8 @@ public class Drive extends SDKSubsystem {
 
     public Lambda driveCommand(boolean isFieldCentric) {
         BoundGamepad gamepad1 = Mercurial.gamepad1();
-        return new Lambda("mecanum-drive-robot-centric")
+        return new Lambda("mecanum-drive")
+                .setRequirements(this)
                 .setInit(() -> {})
                 .setExecute(() -> {
                     double y = gamepad1.leftStickY().state();
@@ -129,7 +130,8 @@ public class Drive extends SDKSubsystem {
 
     public Lambda slowDriveCommand(boolean isFieldCentric) {
         BoundGamepad gamepad1 = Mercurial.gamepad1();
-        return new Lambda("mecanum-drive-robot-centric")
+        return new Lambda("mecanum-drive")
+                .setRequirements(this)
                 .setInit(() -> {})
                 .setExecute(() -> {
                     double y = gamepad1.leftStickY().state();
@@ -161,16 +163,16 @@ public class Drive extends SDKSubsystem {
                     double backRightPower2 = (y + x - rx) / denominator;
 
                     if (isFieldCentric) {
-                        leftFront.get().setPower(frontLeftPower / 3);
-                        leftBack.get().setPower(backLeftPower / 3);
-                        rightFront.get().setPower(frontRightPower / 3);
-                        rightBack.get().setPower(backRightPower / 3);
+                        leftFront.get().setPower(frontLeftPower / 5);
+                        leftBack.get().setPower(backLeftPower / 5);
+                        rightFront.get().setPower(frontRightPower / 5);
+                        rightBack.get().setPower(backRightPower / 5);
                     }
                     else {
-                        leftFront.get().setPower(frontLeftPower2 / 3);
-                        leftBack.get().setPower(backLeftPower2 / 3);
-                        rightFront.get().setPower(frontRightPower2 / 3);
-                        rightBack.get().setPower(backRightPower2 / 3);
+                        leftFront.get().setPower(frontLeftPower2 / 5);
+                        leftBack.get().setPower(backLeftPower2 / 5);
+                        rightFront.get().setPower(frontRightPower2 / 5);
+                        rightBack.get().setPower(backRightPower2 / 5);
                     }
                     /*leftFront.get().setPower(y);
                     leftBack.get().setPower(y);
