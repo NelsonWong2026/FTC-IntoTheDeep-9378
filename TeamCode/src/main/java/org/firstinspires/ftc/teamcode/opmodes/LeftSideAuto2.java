@@ -42,8 +42,8 @@ public class LeftSideAuto2 extends OpMode {
         drive = new MecanumDrive(hardwareMap, initialPose);
         //move to basket
         TrajectoryActionBuilder tab0 = drive.actionBuilder(initialPose)
-                .strafeToLinearHeading(new Vector2d(-52,-55), Math.toRadians(45));
-        TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(-52,-55, Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(-49,-52), Math.toRadians(45));
+        TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(-49,-52, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-57,-57), Math.toRadians(45));
         //move to middle sample
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-57,-57, Math.toRadians(45)))
@@ -111,7 +111,7 @@ public class LeftSideAuto2 extends OpMode {
                                 ),
                                 new SleepAction(2.2)
                         ),
-                        new MercurialAction(Slides.INSTANCE.runToPosition(300)),
+                        new MercurialAction(Slides.INSTANCE.runToPosition(180)),
                         new SleepAction(0.5),
                         //grab sample
                         new MercurialAction(Intake.INSTANCE.setClawPos(0)),
@@ -142,7 +142,7 @@ public class LeftSideAuto2 extends OpMode {
                                 ),
                                 new SleepAction(2.2)
                         ),
-                        new MercurialAction(Slides.INSTANCE.runToPosition(300)),
+                        new MercurialAction(Slides.INSTANCE.runToPosition(180)),
                         new SleepAction(0.5),
                         //grab sample
                         new MercurialAction(Intake.INSTANCE.setClawPos(0)),
@@ -174,9 +174,9 @@ public class LeftSideAuto2 extends OpMode {
                                 ),
                                 new SleepAction(2.2)
                         ),
-                        new MercurialAction(Arm.INSTANCE.runToPosition(400)),
+                        new MercurialAction(Arm.INSTANCE.runToPosition(600)),
                         new SleepAction(0.3),
-                        new MercurialAction(Slides.INSTANCE.runToPosition(500)),
+                        new MercurialAction(Slides.INSTANCE.runToPosition(600)),
                         new SleepAction(0.3),
                         new MercurialAction(Arm.INSTANCE.runToPosition(0)),
                         new SleepAction(0.3),
@@ -207,7 +207,7 @@ public class LeftSideAuto2 extends OpMode {
                                         park
                                 )
                         ),
-                        new MercurialAction(Intake.INSTANCE.setIntakePivotPosition(0.3))
+                        new MercurialAction(Intake.INSTANCE.setIntakePivotPosition(0.25))
                         /*
 
                         moveToMiddle,

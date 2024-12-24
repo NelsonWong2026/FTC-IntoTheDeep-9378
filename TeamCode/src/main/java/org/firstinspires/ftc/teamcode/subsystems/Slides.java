@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.Constants.Slides.*;
-import org.firstinspires.ftc.teamcode.pid.DoubleComponent;
+import org.firstinspires.ftc.teamcode.util.DoubleComponent;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesD;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesI;
 import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesP;

@@ -86,7 +86,7 @@ public class GroupedCommands {
     public CommandGroup setSpecimenCommand() {
         return new Parallel(
                 Arm.INSTANCE.setArmPosition(Arm.ArmState.SPECIMEN_SCORING),
-                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME)
+                Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SPECIMEN_SCORING)
         );
     }
 
@@ -111,9 +111,32 @@ public class GroupedCommands {
     public CommandGroup extendIntakeCommand() {
         return new Parallel(
                 Slides.INSTANCE.setSlidePosition(Slides.SlideState.INTAKE),
+                Intake.INSTANCE.setClawOpenSmaller(),
+                new Sequential(
+                        new Wait(0.25),
+                        Arm.INSTANCE.setArmPosition(Arm.ArmState.INTAKE)
+                ),
                 new Sequential(
                         new Wait(0.5),
                         Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE)
+                )
+        );
+    }
+
+    public CommandGroup grabSample() {
+        return new Parallel(
+                //move arm down
+                Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME),
+                //grab
+                new Sequential(
+                        new Wait(0.25),
+                        Intake.INSTANCE.setClawOpen(false)
+                ),
+
+                //move arm back up
+                new Sequential(
+                        new Wait(0.35),
+                        Arm.INSTANCE.setArmPosition(Arm.ArmState.INTAKE)
                 )
         );
     }
@@ -157,7 +180,7 @@ public class GroupedCommands {
     public CommandGroup setSpecimenBackwardsCommand() {
         return new Parallel(
                 Arm.INSTANCE.runToPosition(4000),
-                Intake.INSTANCE.setIntakePivotPosition(0.54)
+                Intake.INSTANCE.setIntakePivotPosition(0.55)
         );
     }
 

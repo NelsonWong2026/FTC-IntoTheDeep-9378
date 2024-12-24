@@ -18,8 +18,8 @@ public class Constants {
         public static final String rightArm = "rightArm";
         public static final double highScoringPos = 3200.0;
         public static final double midScoringPos = 0.0;
-        public static final double specimenScoringPos = 1900.0;
-        public static final double intakePos = 0.0;
+        public static final double specimenScoringPos = 1200.0;
+        public static final double intakePos = 500.0;
         public static final double homePos = 0.0;
     }
 
@@ -41,11 +41,12 @@ public class Constants {
         public static final String intake = "intake";
         public static final String rotatingIntake = "rotatingIntake";
         public static final double startPos = 0.0;
-        public static final double scoringPos = 0.28;
-        public static final double specimenScoringPos = 0.0;
+        public static final double scoringPos = 0.33;
+        public static final double specimenScoringPos = 0.6;
         public static final double intakePos = 0.96;
         public static final double homePos = 0.68;
         public static final double clawOpenPos = 0.5;
+        public static final double clawOpenSmallerPos = 0.38;
         public static final double clawClosedPos = 0.23;
         public static final double clawRegripPos = 0.26;
         public static final double rotation0Pos = 0.0;

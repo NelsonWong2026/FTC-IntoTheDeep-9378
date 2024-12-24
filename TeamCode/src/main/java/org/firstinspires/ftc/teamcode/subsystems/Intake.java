@@ -136,6 +136,24 @@ public class Intake extends SDKSubsystem {
         }
     }
 
+    public void clawOpenAndCloseSmaller() {
+        switch (Intake.clawState) {
+            case OPEN:
+                intake.get().setPosition(clawClosedPos);
+                Intake.clawState = ClawState.CLOSED;
+                break;
+            case CLOSED:
+                intake.get().setPosition(clawOpenSmallerPos);
+                Intake.clawState = ClawState.OPEN;
+                break;
+        }
+    }
+
+    public void clawOpenSmaller() {
+            intake.get().setPosition(clawOpenSmallerPos);
+            Intake.clawState = ClawState.OPEN;
+    }
+
     @Override
     public void preUserInitHook(@NonNull Wrapper opMode) {
         intakePivotRight.get().setDirection(Servo.Direction.REVERSE);
@@ -178,6 +196,16 @@ public class Intake extends SDKSubsystem {
                     intakePivotLeft.get().setPosition(position);
                     intakePivotRight.get().setPosition(position);
                 });
+    }
+
+    public Lambda setClawOpenSmaller() {
+        return new Lambda("setClawOpenSmaller")
+                .setInit(() -> clawOpenSmaller());
+    }
+
+    public Lambda setClawOpenAndCloseSmaller() {
+        return new Lambda("setClawOpenSmaller")
+                .setInit(() -> clawOpenAndCloseSmaller());
     }
 
 }

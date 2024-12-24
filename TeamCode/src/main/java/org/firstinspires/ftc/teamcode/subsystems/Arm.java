@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import static org.firstinspires.ftc.teamcode.Constants.Arm.*;
 import static org.firstinspires.ftc.teamcode.config.ArmPIDConfig.*;
-import org.firstinspires.ftc.teamcode.pid.DoubleComponent;
-import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesD;
-import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesI;
-import static org.firstinspires.ftc.teamcode.config.SlidesPIDConfig.SlidesP;
+import org.firstinspires.ftc.teamcode.util.DoubleComponent;
 
 import androidx.annotation.NonNull;
 
@@ -15,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.config.ArmPIDConfig;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

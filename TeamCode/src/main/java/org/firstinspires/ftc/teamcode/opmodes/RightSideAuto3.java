@@ -42,7 +42,7 @@ import dev.frozenmilk.mercurial.commands.util.Wait;
 @SilkRoad.Attach
 @Mercurial.Attach
 @Config
-@Autonomous(name = "four specimen auto #2", group = "Autonomous")
+@Autonomous(name = "four specimen auto", group = "Autonomous")
 public class RightSideAuto3 extends OpMode {
     private final Pose2d initialPose = new Pose2d(9, -62, Math.toRadians(-90));
     private Action scoring, moveToPieces, movePiece1, moveToPiece2, movePiece2, pickup, score2, pickup2, score3, pickup3, score4, park, path2, path3, path4, piece2, path6;
@@ -57,42 +57,42 @@ public class RightSideAuto3 extends OpMode {
                 .strafeToConstantHeading(new Vector2d(4, -47));
         TrajectoryActionBuilder tab1 = drive.actionBuilder(new Pose2d(4, -47, Math.toRadians(-90)))
                 //move to piece 1
-                .splineToLinearHeading(new Pose2d(37, -36, Math.toRadians(45)), Math.toRadians(90));
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(37, -36, Math.toRadians(45)))
+                .splineToLinearHeading(new Pose2d(37.6, -35.1, Math.toRadians(45)), Math.toRadians(90));
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(37.6, -35.1, Math.toRadians(45)))
                 //move piece 1
                 .strafeToLinearHeading(new Vector2d(38, -49), Math.toRadians(-45));
         TrajectoryActionBuilder tab3 = drive.actionBuilder(new Pose2d(38, -49, Math.toRadians(-45)))
                 //move to piece 2
-                .strafeToLinearHeading(new Vector2d(47, -32), Math.toRadians(45));
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(47, -32, Math.toRadians(45)))
+                .strafeToLinearHeading(new Vector2d(48, -33.3), Math.toRadians(45));
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(48, -33.3, Math.toRadians(45)))
                 //move piece 2
                 .strafeToLinearHeading(new Vector2d(46, -48), Math.toRadians(-45));
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(46, -48, Math.toRadians(-45)))
                 //move to pickup
                 .strafeToLinearHeading(new Vector2d(46, -35), Math.toRadians(-90))
-                .strafeToConstantHeading(new Vector2d(46, -48));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(46, -48, Math.toRadians(-90)))
+                .strafeToConstantHeading(new Vector2d(46, -48.5));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(46, -48.5, Math.toRadians(-90)))
                 //move to submersible
                 .strafeToConstantHeading(new Vector2d(6, -52))
-                .strafeToConstantHeading(new Vector2d(6, -47));
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(6, -47, Math.toRadians(-90)))
+                .strafeToConstantHeading(new Vector2d(6, -46));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(6, -46, Math.toRadians(-90)))
                 //move to pickup
                 .strafeToConstantHeading(new Vector2d(46, -39))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-48);
-        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(46, -48, Math.toRadians(-90)))
+                .lineToY(-48.5);
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(46, -48.5, Math.toRadians(-90)))
                 //move to submersible
                 .strafeToConstantHeading(new Vector2d(8, -52))
-                .strafeToConstantHeading(new Vector2d(8, -47));
-        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(8, -48, Math.toRadians(-90)))
+                .strafeToConstantHeading(new Vector2d(8, -46));
+        TrajectoryActionBuilder tab9 = drive.actionBuilder(new Pose2d(8, -46, Math.toRadians(-90)))
                 //move to pickup
                 .strafeToConstantHeading(new Vector2d(46, -39))
                 .setTangent(Math.toRadians(90))
-                .lineToY(-48);
-        TrajectoryActionBuilder tab10 = drive.actionBuilder(new Pose2d(46, -48, Math.toRadians(-90)))
+                .lineToY(-48.5);
+        TrajectoryActionBuilder tab10 = drive.actionBuilder(new Pose2d(46, -48.5, Math.toRadians(-90)))
                 //move to submersible
-                .strafeToConstantHeading(new Vector2d(10, -52))
-                .strafeToConstantHeading(new Vector2d(10, -47));
+                .strafeToConstantHeading(new Vector2d(7, -52))
+                .strafeToConstantHeading(new Vector2d(7, -46));
 
         scoring = tab0.build();
         moveToPieces = tab1.build();
@@ -130,21 +130,23 @@ public class RightSideAuto3 extends OpMode {
                                 //moves to first sample
                                 moveToPieces,
                                 //moves to position to grab sample
-                                new MercurialAction(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)),
+                                new MercurialAction(Arm.INSTANCE.runToPosition(300)),
                                 new MercurialAction(Intake.INSTANCE.setIntakeRotation(0.1)),
                                 new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE))
 
                         ),
+                        new MercurialAction(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)),
+                        new SleepAction(0.2),
                         new ParallelAction(
                                 //grabs sample 1,
                                 new MercurialAction(Intake.INSTANCE.setClawPos(0)),
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0.2),
                                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.HOME))
                                 ),
                                 //move to human player station
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0.2),
                                         movePiece1
                                 )
                         ),
@@ -159,18 +161,24 @@ public class RightSideAuto3 extends OpMode {
                                 new SequentialAction(
                                         new SleepAction(0.2),
                                         new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.INTAKE))
+                                ),
+                                new SequentialAction(
+                                        new SleepAction(0.2),
+                                        new MercurialAction(Arm.INSTANCE.runToPosition(300))
                                 )
                         ),
+                        new MercurialAction(Arm.INSTANCE.setArmPosition(Arm.ArmState.HOME)),
+                        new SleepAction(0.2),
                         new ParallelAction(
                                 //grabs sample 2
                                 new MercurialAction(Intake.INSTANCE.setClawPos(0)),
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0.2),
                                         new MercurialAction(Intake.INSTANCE.setIntakePivotPosition(0.7))
                                 ),
                                 //move to human player station
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0.2),
                                         movePiece2
                                 )
 
@@ -203,7 +211,7 @@ public class RightSideAuto3 extends OpMode {
                                 new MercurialAction(Intake.INSTANCE.setClawOpen(false))
                         ),
                         new ParallelAction(
-                                new SleepAction(0.5),
+                                new SleepAction(0.3),
                                 new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING))
                         ),
                         new ParallelAction(
@@ -225,8 +233,7 @@ public class RightSideAuto3 extends OpMode {
                                 new SequentialAction(
                                         new SleepAction(0.4),
                                         new MercurialAction(Intake.INSTANCE.setClawOpen(true))
-                                ),
-                                new SleepAction(0.9)
+                                )
                         ),
                         new ParallelAction(
                                 //move to human player zone
@@ -251,7 +258,7 @@ public class RightSideAuto3 extends OpMode {
                                 new MercurialAction(Intake.INSTANCE.setClawOpen(false))
                         ),
                         new ParallelAction(
-                                new SleepAction(0.5),
+                                new SleepAction(0.3),
                                 new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING))
                         ),
                         new ParallelAction(
@@ -259,11 +266,11 @@ public class RightSideAuto3 extends OpMode {
                                 score3,
                                 //set to scoring pos
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0),
                                         new MercurialAction(GroupedCommands.INSTANCE.setSpecimenBackwardsCommand())
                                 ),
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0),
                                         new MercurialAction(Intake.INSTANCE.setIntakeRotation(rotation0Pos))
                                 )
                         ),
@@ -298,7 +305,7 @@ public class RightSideAuto3 extends OpMode {
                                 new MercurialAction(Intake.INSTANCE.setClawOpen(false))
                         ),
                         new ParallelAction(
-                                new SleepAction(0.5),
+                                new SleepAction(0.3),
                                 new MercurialAction(Intake.INSTANCE.setIntakePivot(Intake.IntakePivotState.SCORING))
                         ),
                         new ParallelAction(
@@ -306,11 +313,11 @@ public class RightSideAuto3 extends OpMode {
                                 score4,
                                 //set to scoring pos
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0),
                                         new MercurialAction(GroupedCommands.INSTANCE.setSpecimenBackwardsCommand())
                                 ),
                                 new SequentialAction(
-                                        new SleepAction(0.3),
+                                        new SleepAction(0),
                                         new MercurialAction(Intake.INSTANCE.setIntakeRotation(rotation0Pos))
                                 )
                         ),
